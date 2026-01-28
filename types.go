@@ -73,3 +73,35 @@ const (
 	RoleConsumer           Role = 7
 	RoleDistributor        Role = 8
 )
+
+// HeatPumpState represents a derived operational state from log data.
+type HeatPumpState string
+
+const (
+	HeatPumpStateOffline       HeatPumpState = "offline"
+	HeatPumpStateStandby       HeatPumpState = "standby"
+	HeatPumpStateWaterCheck    HeatPumpState = "water_check"
+	HeatPumpStateHeating       HeatPumpState = "heating"
+	HeatPumpStateCooling       HeatPumpState = "cooling"
+	HeatPumpStateDHW           HeatPumpState = "dhw"
+	HeatPumpStateLegionella    HeatPumpState = "legionella_prevention"
+	HeatPumpStateDefrosting    HeatPumpState = "defrosting"
+	HeatPumpStateSelfTest      HeatPumpState = "self_test"
+	HeatPumpStateManualControl HeatPumpState = "manual_control"
+)
+
+// HeatPumpModelName returns a human-friendly model label.
+func HeatPumpModelName(model HeatPumpModel) string {
+	switch model {
+	case HeatPumpModelBlackBirdP80:
+		return "Blackbird P80 heat pump"
+	case HeatPumpModelBlackBirdP60:
+		return "Blackbird P60 heat pump"
+	case HeatPumpModelSparrowP60Brown, HeatPumpModelSparrowP60Green, HeatPumpModelSparrowP60Grey:
+		return "Sparrow P60 heat pump"
+	case HeatPumpModelFlintP40:
+		return "Flint P40 heat pump"
+	default:
+		return "Unknown"
+	}
+}
