@@ -78,6 +78,3 @@ type RawHeatPumpLog struct {
 	DebugVariable5                           *float64  `json:"debugVariable5,omitempty"`
 	IsOnline                                 *bool     `json:"isOnline,omitempty"`
 }
-
-// HeatPumpLogView stores aggregated log output without filtering fields.
-type HeatPumpLogView map[string]any
