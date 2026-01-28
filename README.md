@@ -5,14 +5,65 @@ Batteries-included Go client for the Weheat cloud API.
 ## Status
 - Read-only endpoints (no control APIs discovered yet).
 - Mirrors the public OpenAPI shapes from the upstream `weheat` Python client.
+- Includes helper abstractions (discovery + `HeatPump` computed metrics).
+
+## Installation
+```sh
+go get github.com/joshp123/weheat-golang
+```
 
 ## Base URLs
 - Default API: `https://api.weheat.nl`
 - Legacy/alt: `https://api.weheat.nl/third_party` (if your account requires it)
 
-## Auth
-Weheat uses OAuth2 (Keycloak). This client accepts a token source so you can plug in
-Gohome’s OAuth manager or a static access token.
+## Wiring it up (OAuth)
+Weheat uses Keycloak OAuth2. You need a **client_id** and **client_secret** from Weheat.
+
+### 1) Exchange credentials for a refresh token (example)
+```go
+import (
+  "context"
+  "golang.org/x/oauth2"
+  weheat "github.com/joshp123/weheat-golang"
+)
+
+ctx := context.Background()
+conf := &oauth2.Config{
+  ClientID:     clientID,
+  ClientSecret: clientSecret,
+  Endpoint: oauth2.Endpoint{
+    TokenURL: weheat.DefaultTokenURL,
+  },
+  Scopes: weheat.DefaultScopes,
+}
+
+token, err := conf.PasswordCredentialsToken(ctx, username, password)
+refreshToken := token.RefreshToken
+```
+
+Store the refresh token in your secret manager (e.g., agenix). If direct grant is disabled
+for your account, you’ll need Weheat to provide an alternate flow.
+
+### 2) Create a client with refresh-token auto-rotation
+```go
+source, _ := weheat.OAuthTokenSource(weheat.OAuthConfig{
+  ClientID:     clientID,
+  ClientSecret: clientSecret,
+  RefreshToken: refreshToken,
+})
+
+client, _ := weheat.NewClient(
+  weheat.WithTokenSource(source),
+  // use WithBaseURL("https://api.weheat.nl/third_party") if needed
+)
+```
+
+### 3) Or use a static access token
+```go
+client, _ := weheat.NewClient(
+  weheat.WithTokenSource(weheat.StaticToken(accessToken)),
+)
+```
 
 ## Quick start
 ```go
