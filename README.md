@@ -39,6 +39,21 @@ func main() {
 }
 ```
 
+## Helpers
+```go
+ctx := context.Background()
+client, _ := weheat.NewClient(
+  weheat.WithTokenSource(weheat.StaticToken("ACCESS_TOKEN")),
+)
+
+pumps, _ := client.DiscoverActiveHeatPumps(ctx)
+if len(pumps) > 0 {
+  hp := weheat.NewHeatPump(client, pumps[0].ID)
+  _ = hp.RefreshStatus(ctx, weheat.RequestOptions{})
+  fmt.Println(hp.COP())
+}
+```
+
 ## License
 MIT
 

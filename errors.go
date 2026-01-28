@@ -1,6 +1,11 @@
 package weheat
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
+
+var ErrClientMissing = errors.New("weheat: client required")
 
 // APIError represents a non-2xx response from the Weheat API.
 type APIError struct {
