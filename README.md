@@ -7,6 +7,11 @@ Batteries-included Go client for the Weheat cloud API.
 - Mirrors the public OpenAPI shapes from the upstream `weheat` Python client.
 - Includes helper abstractions (discovery + `HeatPump` computed metrics).
 
+You can do things like this, when paired with a home-assistant-like knockoff like my [GoHome](https://github.com/joshp123/gohome) tool:
+
+<img width="2308" height="1831" alt="image" src="https://github.com/user-attachments/assets/02665151-8f7a-4a78-97b9-d8bec9b7f61c" />
+
+
 ## Installation
 ```sh
 go get github.com/joshp123/weheat-golang
